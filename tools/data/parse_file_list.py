@@ -553,7 +553,7 @@ def parse_afors2022_splits():
             if file_.split('/')[-1].split('__')[0] == person:
                 class_ = file_.split('/')[-2]
                 class_id = int(class_) - 1 
-                train_list.append((file_[len('data/afors/videos/'):], class_id))
+                train_list.append((file_[len('data/afors/videos/'):-4], class_id))
 
     test_list = []
     for person in test:
