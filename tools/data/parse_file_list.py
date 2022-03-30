@@ -533,3 +533,35 @@ def parse_diving48_splits():
 
     splits = ((train_list, test_list), )
     return splits
+
+def parse_afors2022_splits():
+    train_file = 'data/afors/annotations/train.txt'
+    test_file = 'data/afors/annotations/val.txt'
+
+    with open(train_file) as f:
+        train = f.readlines()
+    train = [x.strip() for x in train]
+    with open(test_file) as f:
+        test = f.readlines()
+    test = [x.strip() for x in test]
+    # train, test: list of <person>
+    all_files = glob.glob('data/afors/videos/*/*.mp4')
+    # data/afors/videos/<class>/<person>__<record_time>_<class>.mp4
+    train_list = []
+    for person in train:
+        for file_ in all_files:
+            if file_.split('/')[-1].split('__')[0] == person:
+                class_ = file_.split('/')[-2]
+                class_id = int(class_) - 1 
+                train_list.append((file_[len('data/afors/videos/'):], class_id))
+
+    test_list = []
+    for person in test:
+        for file_ in all_files:
+            if file_.split('/')[-1].split('__')[0] == person:
+                class_ = file_.split('/')[-2]
+                class_id = int(class_) - 1 
+                test_list.append((file_[len('data/afors/videos/'):], class_id))
+
+    splits = ((train_list, test_list), )
+    return splits
